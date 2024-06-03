@@ -5,15 +5,17 @@ import "@/theme.css";
 import App from "./App";
 import { RouterProvider } from "react-router-dom";
 import router from "./router";
+import store from "./store";
+import { Provider } from "react-redux";
 import { sum } from "@/test";
 
 let a = sum([1, 2]);
 console.log(a);
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <RouterProvider router={router}>
-    <App />
-  </RouterProvider>
+  <Provider store={store}>
+    <RouterProvider router={router}></RouterProvider>
+  </Provider>
 );
 
 // If you want to start measuring performance in your app, pass a function
