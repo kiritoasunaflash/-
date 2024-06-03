@@ -1,4 +1,4 @@
-const Layout = () => {
-  return <div>我是Layout</div>;
+const New = () => {
+  return <div>我是New</div>;
 };
-export default Layout;
+export default New;
