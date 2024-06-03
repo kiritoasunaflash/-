@@ -1,7 +1,21 @@
 import { NavBar, DatePicker } from "antd-mobile";
 import "./index.scss";
+import { useState } from "react";
+import classNames from "classnames";
+import dayjs from "dayjs";
+import moment from "moment";
 
 const Month = () => {
+  const [dataVisble, setDataVisble] = useState(false);
+  const [dateValue, setDateValue] = useState(() => {
+    return new Date();
+    // return new Date();
+  });
+  const onConfirm = (value) => {
+    setDateValue(value);
+    setDataVisble(false);
+    console.log(dateValue);
+  };
   return (
     <div className="monthlyBill">
       <NavBar className="nav" backArrow={false}>
@@ -10,9 +24,19 @@ const Month = () => {
       <div className="content">
         <div className="header">
           {/* 时间切换区域 */}
-          <div className="date">
-            <span className="text">2023 | 3月账单</span>
-            <span className="arrow expand"></span>
+          <div
+            className="date"
+            onClick={() => {
+              setDataVisble(true);
+            }}
+          >
+            <span className="text">
+              {dayjs(dateValue).format("YYYY")} | {dayjs(dateValue).format("M")}
+              月账单
+            </span>
+            <span
+              className={classNames("arrow", dataVisble && "expand")}
+            ></span>
           </div>
           {/* 统计区域 */}
           <div className="twoLineOverview">
@@ -34,7 +58,12 @@ const Month = () => {
             className="kaDate"
             title="记账日期"
             precision="month"
-            visible={false}
+            visible={dataVisble}
+            onCancel={() => {
+              setDataVisble(false);
+            }}
+            onConfirm={onConfirm}
+            value={dateValue}
             max={new Date()}
           />
         </div>

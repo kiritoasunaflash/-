@@ -50,9 +50,11 @@
             transform: rotate(225deg);
             transform-origin: center;
             transition: all 0.3s;
+         
           }
           .arrow.expand {
             transform: translate(0, 2px) rotate(45deg);
+            color:#ccc !important;
           }
         }
       }
