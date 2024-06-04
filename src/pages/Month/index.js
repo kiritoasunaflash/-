@@ -1,10 +1,11 @@
 import { NavBar, DatePicker } from "antd-mobile";
 import "./index.scss";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import classNames from "classnames";
 import dayjs from "dayjs";
 import { useSelector } from "react-redux";
 import _ from "lodash";
+import DailyBill from "./components/everydaySalary";
 
 const Month = () => {
   const [dataVisble, setDataVisble] = useState(false);
@@ -14,8 +15,20 @@ const Month = () => {
   });
   const [monthList, setMonthList] = useState([]);
   const { billList } = useSelector((state) => state.bill);
+  //按月分组
   const groupList = useMemo(() => {
     return _.groupBy(billList, (item) => dayjs(item.date).format("YYYY-MM"));
+  }, [billList]);
+  //按日分组
+  const dayGroupList = useMemo(() => {
+    const groupDayList = _.groupBy(billList, (item) =>
+      dayjs(item.date).format("YYYY-MM-DD")
+    );
+    const groupDayKeys = Object.keys(groupDayList);
+    return {
+      groupDayList,
+      groupDayKeys,
+    };
   }, [billList]);
   const onConfirm = (value) => {
     setDateValue(value);
@@ -43,6 +56,10 @@ const Month = () => {
       return;
     }
   }, [monthList]);
+  useEffect(() => {
+    const nowDate = dayjs().format("YYYY-MM");
+    if (groupList[nowDate]) setMonthList(groupList[nowDate]);
+  }, [groupList]);
   return (
     <div className="monthlyBill">
       <NavBar className="nav" backArrow={false}>
@@ -68,18 +85,25 @@ const Month = () => {
           {/* 统计区域 */}
           <div className="twoLineOverview">
             <div className="item">
-              <span className="money">{monthResult.payMoney.toFixed(2)}</span>
+              <span className="money">
+                {monthResult?.payMoney.toFixed(2) || 0}
+              </span>
               <span className="type">支出</span>
             </div>
             <div className="item">
-              <span className="money">{monthResult.income.toFixed(2)}</span>
+              <span className="money">
+                {monthResult?.income.toFixed(2) || 0}
+              </span>
               <span className="type">收入</span>
             </div>
             <div className="item">
-              <span className="money">{monthResult.allTotal.toFixed(2)}</span>
+              <span className="money">
+                {monthResult?.allTotal.toFixed(2) || 0}
+              </span>
               <span className="type">结余</span>
             </div>
           </div>
+
           {/* 时间选择器 */}
           <DatePicker
             className="kaDate"
@@ -94,6 +118,13 @@ const Month = () => {
             max={new Date()}
           />
         </div>
+        {dayGroupList.groupDayKeys.map((item) => (
+          <DailyBill
+            key={item}
+            date={item}
+            billList={Object.keys(item)}
+          ></DailyBill>
+        ))}
       </div>
     </div>
   );
