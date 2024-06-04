@@ -145,3 +145,7 @@
 .dailyBill.expand .billList {
   display: block;
 }
+
+.active {
+  display: none !important;
+}

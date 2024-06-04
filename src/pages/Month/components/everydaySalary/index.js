@@ -1,7 +1,11 @@
 import classNames from "classnames";
 import "./index.scss";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
+import { billTypeToName } from "@/contants";
 const DailyBill = ({ date, billList }) => {
+  // 取反符号
+  const [flag, setFlag] = useState(true);
+  //计算支出等
   const dayResult = useMemo(() => {
     console.log(billList);
     if (billList && billList?.length > 0) {
@@ -25,7 +29,10 @@ const DailyBill = ({ date, billList }) => {
       <div className="headers">
         <div className="dateIcon">
           <span className="date">{date}</span>
-          <span className={classNames("arrow")}></span>
+          <span
+            className={classNames("arrow", flag && "expand")}
+            onClick={() => setFlag(!flag)}
+          ></span>
         </div>
         <div className="oneLineOverview">
           <div className="pay">
@@ -41,6 +48,18 @@ const DailyBill = ({ date, billList }) => {
             <span className="type">结余</span>
           </div>
         </div>
+      </div>
+      <div className={classNames("billList", flag && "active")}>
+        {billList.map((item) => {
+          return (
+            <div className="bill" key={item.id}>
+              <div className="detail">
+                <div className="billType">{billTypeToName[item.useFor]}</div>
+              </div>
+              <div className={classNames("money", item.type)}>{item.money}</div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

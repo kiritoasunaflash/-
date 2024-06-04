@@ -24,6 +24,7 @@ const Month = () => {
     const groupDayList = _.groupBy(billList, (item) =>
       dayjs(item.date).format("YYYY-MM-DD")
     );
+    console.log(Object.values(groupDayList));
     const groupDayKeys = Object.keys(groupDayList);
     return {
       groupDayList,
@@ -122,7 +123,7 @@ const Month = () => {
           <DailyBill
             key={item}
             date={item}
-            billList={Object.keys(item)}
+            billList={dayGroupList.groupDayList[item]}
           ></DailyBill>
         ))}
       </div>
