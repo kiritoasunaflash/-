@@ -61,6 +61,7 @@ const Month = () => {
     const nowDate = dayjs().format("YYYY-MM");
     if (groupList[nowDate]) setMonthList(groupList[nowDate]);
   }, [groupList]);
+  console.log(111);
   return (
     <div className="monthlyBill">
       <NavBar className="nav" backArrow={false}>
