@@ -4,9 +4,18 @@ import "./index.scss";
 import classNames from "classnames";
 import { billListData } from "@/contants";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const New = () => {
+  const [flagState, setFlagState] = useState("pay");
   const navigate = useNavigate();
+  const changePayOrIncome = (type) => {
+    if (type === "pay") {
+      setFlagState("pay");
+    } else {
+      setFlagState("income");
+    }
+  };
   return (
     <div className="keepAccounts">
       <NavBar className="nav" onBack={() => navigate(-1)}>
@@ -15,10 +24,18 @@ const New = () => {
 
       <div className="header">
         <div className="kaType">
-          <Button shape="rounded" className={classNames("selected")}>
+          <Button
+            shape="rounded"
+            className={classNames(flagState === "pay" && "selected")}
+            onClick={() => changePayOrIncome("pay")}
+          >
             支出
           </Button>
-          <Button className={classNames("")} shape="rounded">
+          <Button
+            className={classNames(flagState === "income" && "selected")}
+            shape="rounded"
+            onClick={() => changePayOrIncome("income")}
+          >
             收入
           </Button>
         </div>
@@ -43,7 +60,7 @@ const New = () => {
       </div>
 
       <div className="kaTypeList">
-        {billListData["pay"].map((item) => {
+        {billListData[flagState].map((item) => {
           return (
             <div className="kaType" key={item.type}>
               <div className="title">{item.name}</div>
